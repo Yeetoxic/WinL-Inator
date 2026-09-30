@@ -82,7 +82,7 @@ public partial class Form1 : Form
         hintLabel.Dock = DockStyle.Fill;
         hintLabel.Name = "hintLabel";
         hintLabel.TabIndex = 2;
-        hintLabel.Text = "Alt+1 to remove this from your system";
+        hintLabel.Text = "Alt+1 to remove this from your system\n(or just close the window)";
         hintLabel.TextAlign = ContentAlignment.MiddleCenter;
         //
         // Form1
