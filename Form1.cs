@@ -6,6 +6,18 @@ public partial class Form1 : Form
     {
         InitializeComponent();
         BuildMainWindow();
+        //
+        // pos
+        //
+        Shown += (_, _) =>
+        {
+            var workingArea = Screen.FromControl(this).WorkingArea;
+
+            Location = new Point(
+                workingArea.Right - Width - 10,
+                workingArea.Top + 10
+            );
+        };
     }
 
     private void BuildMainWindow()
@@ -84,7 +96,8 @@ public partial class Form1 : Form
         ForeColor = Color.Gainsboro;
         MinimumSize = new Size(560, 320);
         Name = "Form1";
-        StartPosition = FormStartPosition.CenterScreen;
+        StartPosition = FormStartPosition.Manual;
+        TopMost = true;
         Text = "WinL-Inator";
         windowLayout.ResumeLayout(false);
         messageLayout.ResumeLayout(false);
