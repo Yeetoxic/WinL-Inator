@@ -13,6 +13,24 @@ static class Program
         ApplicationConfiguration.Initialize();
         using var alphabetizer = new KeyboardAlphabetizer();
         using var mainWindow = new Form1();
+        using var mutex = new Mutex(
+            true,
+            @"Local\WinL-Inator",
+            out bool isFirstInstance
+        );
+
+        if (!isFirstInstance)
+        {
+            MessageBox.Show(
+                "WinL-Inator is already running.",
+                "WinL-Inator",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+
+            return;
+        }
+
         mainWindow.Shown += (_, _) =>
         {
             try
