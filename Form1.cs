@@ -1,4 +1,5 @@
 namespace WinL_Inator;
+using System.Runtime.InteropServices;
 
 public partial class Form1 : Form
 {
@@ -6,6 +7,7 @@ public partial class Form1 : Form
     {
         InitializeComponent();
         BuildMainWindow();
+
         //
         // pos
         //
@@ -18,6 +20,66 @@ public partial class Form1 : Form
                 workingArea.Top + 10
             );
         };
+    }
+
+    // Listen for the registered hotkey.
+    protected override void WndProc(ref Message m)
+    {
+        if (m.Msg == WM_HOTKEY &&
+            m.WParam.ToInt32() == HOTKEY_ID)
+        {
+            Close();
+            return;
+        }
+
+        base.WndProc(ref m);
+    }
+
+    //
+    // hotkey
+    //
+    [DllImport("user32.dll")]
+    private static extern bool RegisterHotKey(
+        IntPtr hWnd,
+        int id,
+        uint fsModifiers,
+        uint vk
+    );
+
+    [DllImport("user32.dll")]
+    private static extern bool UnregisterHotKey(
+        IntPtr hWnd,
+        int id
+    );
+
+    private const int HOTKEY_ID = 1;
+    private const uint MOD_ALT = 0x0001;
+    private const uint VK_1 = 0x31;
+    private const int WM_HOTKEY = 0x0312;
+
+    //
+    // Overrides
+    //
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+
+        RegisterHotKey(
+            Handle,
+            HOTKEY_ID,
+            MOD_ALT,
+            VK_1
+        );
+    }
+
+    //
+    // Hotkey cleanup
+    //
+    protected override void OnHandleDestroyed(EventArgs e)
+    {
+        UnregisterHotKey(Handle, HOTKEY_ID);
+
+        base.OnHandleDestroyed(e);
     }
 
     private void BuildMainWindow()
